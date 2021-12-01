@@ -96,4 +96,4 @@ begin
     end;
 end;
 
-PAL--audio-format mp3.UnlockExecution;
+PAL.UnlockExecution;
