@@ -1,0 +1,99 @@
+{# Christmas1.pal #}
+{# Add files to queue script #}
+
+{#
+Weighted (smWeighted) Each song has a weight assigned to it. The higher the weight, the more often it will get played under weighted rotation logic. A song with a weight of 60 will get played twice as much as a song with a weight of 30.
+Priority (smPriority) The songs with the highest weight will get played. Always enforce playlist rules or the same song will get played continuously until its weight decreases below another song's weight!
+Random (smRandom) Selects a song totally at random from the category.
+Most recently played song (smMRP) Selects the song with the newest play date.
+Least recently played song (smLRP) Selects the song with the oldest play date.
+Most recently played artist (smMRPA) First, it selects the artist with the newest play date. Then it will select the song from the artist with the newest play date.
+Least recently played artist (smLRPA) First, it selects the artist with the oldest play date. Then it will select the song from the artist with the oldest play date.
+Lemming Rules (smLemmingRules) Lemming rules randomly selects a selection method, and then uses that selection method to select a song. This gives a very nice random selection.
+Note: Lemming Rules does not use the smMRP and smLRP selection methods since they tend to repeat songs too often.
+#}
+
+PAL.LockExecution;
+
+//PAL.Loop := True;
+
+var theYear : Integer = 0;
+var theMonth : Integer = 0;
+var theDay : Integer = 0;
+DecodeDate(now, theYear, theMonth, theDay);
+var mytime : DateTime = now;
+var randomInteger : Integer = 0;
+
+WriteLn('theMonth='+IntToStr(theMonth));
+
+if (theMonth = 12) then
+begin
+  WriteLn('theDay='+IntToStr(theDay));
+  case theDay of
+  1,2,3,4,5,6,7:
+    begin
+      if (mytime >= (date + EncodeTime(18,00,00,0))) then
+      begin
+          cat['Quiet'].QueueTop(smLRP, EnforceRules)
+      end
+      else begin
+          cat['Christmas'].QueueTop(smLRP, EnforceRules);
+      end;
+      WriteLn('1 Christmas');
+    end;
+  8,9,10,11,12,13,14:
+    begin
+      if (mytime >= (date + EncodeTime(18,00,00,0))) then
+      begin
+          cat['Quiet'].QueueTop(smLRP, EnforceRules);
+          cat['Quiet'].QueueTop(smLRP, EnforceRules);
+      end
+      else begin
+          cat['Christmas'].QueueTop(smLRP, EnforceRules);
+          cat['Christmas'].QueueTop(smLRP, EnforceRules);
+      end;
+      WriteLn('2 Christmas');
+    end;
+  15,16,17,18,19,20,21,22,23,24,25:
+    begin
+      if (mytime >= (date + EncodeTime(18,00,00,0)))
+      then begin
+          cat['Quiet'].QueueTop(smLRP, EnforceRules);
+          cat['Quiet'].QueueTop(smLRP, EnforceRules);
+          cat['Quiet'].QueueTop(smLRP, EnforceRules);
+      end
+      else begin
+          cat['Christmas'].QueueTop(smLRP, EnforceRules);
+          cat['Christmas'].QueueTop(smLRP, EnforceRules);
+          cat['Christmas'].QueueTop(smLRP, EnforceRules);
+      end;
+      WriteLn('3 Christmas');
+    end;
+  26:
+    begin
+      if (mytime >= (date + EncodeTime(18,00,00,0)))
+      then begin
+          cat['Quiet'].QueueTop(smLRP, EnforceRules);
+          cat['Quiet'].QueueTop(smLRP, EnforceRules);
+      end
+      else begin
+          cat['Christmas'].QueueTop(smLRP, EnforceRules);
+          cat['Christmas'].QueueTop(smLRP, EnforceRules);
+      end;
+      WriteLn('2 after Christmas');
+    end;
+  27,28,29,30:
+    begin
+      if (mytime >= (date + EncodeTime(18,00,00,0))) then
+      begin
+          cat['Quiet'].QueueTop(smLRP, EnforceRules);
+      end
+      else begin
+          cat['Christmas'].QueueTop(smLRP, EnforceRules);
+      end;
+      WriteLn('1 after Christmas');
+    end;
+    end;
+end;
+
+PAL--audio-format mp3.UnlockExecution;
